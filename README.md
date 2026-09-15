@@ -405,19 +405,16 @@ git push origin feature/your-feature
 
 ## 👨‍💻 Built By
 
-<table>
-<tr>
-<td align="center">
-<a href="https://github.com/01AnshYadav">
-<img src="https://github.com/01AnshYadav.png" width="100px;" alt="Ansh"/>
-<br />
-<b>Ansh Yadav</b>
-</a>
-<br />
-<sub>Developer</sub>
-</td>
-</tr>
-</table>
+## 👨‍💻 Developed By
+
+**Ansh Yadav** · **Omesh Bajpai**
+
+[![Ansh Yadav](https://img.shields.io/badge/GitHub-01AnshYadav-181717?style=for-the-badge\&logo=github)](https://github.com/01AnshYadav)
+
+[![Omesh Bajpai](https://img.shields.io/badge/GitHub-omesh28bajpai--ship--it-181717?style=for-the-badge\&logo=github)](https://github.com/omesh28bajpai-ship-it)
+
+Built together with for our college community.
+
 
 ---
 
