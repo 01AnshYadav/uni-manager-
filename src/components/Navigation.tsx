@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
 const navItems = [
-  { name: "Announcements", href: "/", icon: Bell },
+  { name: "Updates", href: "/", icon: Bell },
   { name: "Resources", href: "/resources", icon: Folder },
-  { name: "Daily Logs", href: "/daily-logs", icon: CalendarDays },
+  { name: "Class Log", href: "/daily-logs", icon: CalendarDays },
 ];
 
 export default function Navigation() {

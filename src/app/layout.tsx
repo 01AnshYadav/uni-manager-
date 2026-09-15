@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
-import PageTransition from "@/components/PageTransition";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,9 +21,7 @@ export default function RootLayout({
         <Navigation />
         {/* Main content wrapper with bottom padding for mobile nav */}
         <main className="flex-1 w-full max-w-5xl mx-auto px-4 pb-24 md:pb-8 pt-6 md:pt-8 overflow-hidden">
-          <PageTransition>
-            {children}
-          </PageTransition>
+          {children}
         </main>
       </body>
     </html>

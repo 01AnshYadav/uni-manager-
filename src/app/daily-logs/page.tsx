@@ -1,22 +1,41 @@
 "use client";
 
-import { useState } from "react";
-import { mockDailyLogs } from "@/types";
+import { useEffect, useState } from "react";
 import { BookOpen, Calendar as CalendarIcon, Image as ImageIcon } from "lucide-react";
 import { format, parseISO } from "date-fns";
+import { apiClient } from "@/lib/api/client";
+import { DailyLog } from "@/lib/api/types";
+import StateRenderer from "@/components/ui/StateRenderer";
 
 export default function DailyLogsPage() {
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toISOString().split("T")[0]
   );
+  const [logs, setLogs] = useState<DailyLog[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  const logsForDate = mockDailyLogs.filter((log) => log.log_date === selectedDate);
+  useEffect(() => {
+    async function loadLogs() {
+      try {
+        setIsLoading(true);
+        const data = await apiClient.getDailyLogs({ date: selectedDate });
+        setLogs(data);
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('Unknown error occurred'));
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadLogs();
+  }, [selectedDate]);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Daily Logs</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Class Log</h1>
           <p className="text-slate-500 mt-1">What happened in class today.</p>
         </div>
         
@@ -31,27 +50,22 @@ export default function DailyLogsPage() {
         </div>
       </div>
 
-      {logsForDate.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 px-4 text-center bg-white rounded-2xl border border-slate-200 border-dashed">
-          <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-            <BookOpen className="w-8 h-8 text-slate-300" />
-          </div>
-          <h3 className="text-lg font-medium text-slate-900">No logs for this date</h3>
-          <p className="text-slate-500 max-w-sm mt-1">
-            There are no class logs recorded for {format(parseISO(selectedDate), "MMMM d, yyyy")}. 
-            It might be a weekend or holiday.
-          </p>
-        </div>
-      ) : (
+      <StateRenderer 
+        isLoading={isLoading} 
+        error={error} 
+        isEmpty={!isLoading && logs.length === 0}
+        emptyTitle="No logs for this date"
+        emptyMessage={`There are no class logs recorded for ${selectedDate ? format(parseISO(selectedDate), "MMMM d, yyyy") : 'this date'}.`}
+      >
         <div className="grid gap-6">
-          {logsForDate.map((log) => (
+          {logs.map((log) => (
             <div key={log.id} className="p-6 rounded-2xl border border-slate-200 bg-white shadow-sm">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-2 h-8 bg-blue-500 rounded-full"></div>
                 <h2 className="text-xl font-semibold text-slate-900">{log.subject}</h2>
               </div>
               <p className="text-slate-600 leading-relaxed whitespace-pre-wrap">
-                {log.description}
+                {log.summary}
               </p>
               
               {log.photo_urls && log.photo_urls.length > 0 && (
@@ -77,7 +91,7 @@ export default function DailyLogsPage() {
             </div>
           ))}
         </div>
-      )}
+      </StateRenderer>
     </div>
   );
 }
